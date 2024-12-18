@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+void calculate_paging_time(double memory_access_time, double tlb_hit_rate) {
+    // Tanpa TLB
+    double paging_time_without_tlb = 2 * memory_access_time;
+    double overhead_without_tlb = (paging_time_without_tlb / memory_access_time) - 1;
+
+    // Dengan TLB
+    double paging_time_with_tlb = tlb_hit_rate * memory_access_time +
+                                  (1 - tlb_hit_rate) * 2 * memory_access_time;
+    double overhead_with_tlb = (paging_time_with_tlb / memory_access_time) - 1;
+
+    // Output
+    printf("Tanpa TLB:\n");
+    printf("  Waktu Paging: %.2f ns\n", paging_time_without_tlb);
+    printf("  Penurunan Kecepatan (Overhead): %.2f%%\n\n", overhead_without_tlb * 100);
+
+    printf("Dengan TLB (Hit Rate: %.2f):\n", tlb_hit_rate);
+    printf("  Waktu Paging: %.2f ns\n", paging_time_with_tlb);
+    printf("  Penurunan Kecepatan (Overhead): %.2f%%\n", overhead_with_tlb * 100);
+}
+
+int main() {
+    double memory_access_time;
+    double tlb_hit_rate;
+
+    // Input waktu akses memori dan TLB hit rate
+    printf("Masukkan waktu akses memori (nanodetik): ");
+    scanf("%lf", &memory_access_time);
+
+    printf("Masukkan TLB hit rate (0 hingga 1): ");
+    scanf("%lf", &tlb_hit_rate);
+
+    // Hitung dan tampilkan hasil
+    calculate_paging_time(memory_access_time, tlb_hit_rate);
+
+    return 0;
+}
