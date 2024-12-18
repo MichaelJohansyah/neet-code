@@ -1,0 +1,107 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define PARTITIONS 5
+#define PROCESSES 4
+
+void firstFit(int partitions[], int partitionSize[], int processes[], int processSize[]) {
+    printf("\nFirst Fit Allocation:\n");
+    int allocation[PROCESSES];
+    for (int i = 0; i < PROCESSES; i++) allocation[i] = -1;
+
+    for (int i = 0; i < PROCESSES; i++) {
+        for (int j = 0; j < PARTITIONS; j++) {
+            if (partitionSize[j] >= processSize[i]) {
+                allocation[i] = j;
+                partitionSize[j] -= processSize[i];
+                break;
+            }
+        }
+    }
+    
+    for (int i = 0; i < PROCESSES; i++) {
+        if (allocation[i] != -1)
+            printf("Process %d (%dK) -> Partition %d\n", i + 1, processSize[i], allocation[i] + 1);
+        else
+            printf("Process %d (%dK) -> Not Allocated\n", i + 1, processSize[i]);
+    }
+}
+
+void bestFit(int partitions[], int partitionSize[], int processes[], int processSize[]) {
+    printf("\nBest Fit Allocation:\n");
+    int allocation[PROCESSES];
+    for (int i = 0; i < PROCESSES; i++) allocation[i] = -1;
+
+    for (int i = 0; i < PROCESSES; i++) {
+        int bestIdx = -1;
+        for (int j = 0; j < PARTITIONS; j++) {
+            if (partitionSize[j] >= processSize[i]) {
+                if (bestIdx == -1 || partitionSize[j] < partitionSize[bestIdx])
+                    bestIdx = j;
+            }
+        }
+        if (bestIdx != -1) {
+            allocation[i] = bestIdx;
+            partitionSize[bestIdx] -= processSize[i];
+        }
+    }
+
+    for (int i = 0; i < PROCESSES; i++) {
+        if (allocation[i] != -1)
+            printf("Process %d (%dK) -> Partition %d\n", i + 1, processSize[i], allocation[i] + 1);
+        else
+            printf("Process %d (%dK) -> Not Allocated\n", i + 1, processSize[i]);
+    }
+}
+
+void worstFit(int partitions[], int partitionSize[], int processes[], int processSize[]) {
+    printf("\nWorst Fit Allocation:\n");
+    int allocation[PROCESSES];
+    for (int i = 0; i < PROCESSES; i++) allocation[i] = -1;
+
+    for (int i = 0; i < PROCESSES; i++) {
+        int worstIdx = -1;
+        for (int j = 0; j < PARTITIONS; j++) {
+            if (partitionSize[j] >= processSize[i]) {
+                if (worstIdx == -1 || partitionSize[j] > partitionSize[worstIdx])
+                    worstIdx = j;
+            }
+        }
+        if (worstIdx != -1) {
+            allocation[i] = worstIdx;
+            partitionSize[worstIdx] -= processSize[i];
+        }
+    }
+
+    for (int i = 0; i < PROCESSES; i++) {
+        if (allocation[i] != -1)
+            printf("Process %d (%dK) -> Partition %d\n", i + 1, processSize[i], allocation[i] + 1);
+        else
+            printf("Process %d (%dK) -> Not Allocated\n", i + 1, processSize[i]);
+    }
+}
+
+int main() {
+    int partitions[PARTITIONS] = {100, 500, 200, 300, 600};
+    int processes[PROCESSES] = {212, 417, 112, 426};
+
+    int partitionSize[PARTITIONS];
+    int processSize[PROCESSES];
+
+    // First Fit
+    for (int i = 0; i < PARTITIONS; i++) partitionSize[i] = partitions[i];
+    for (int i = 0; i < PROCESSES; i++) processSize[i] = processes[i];
+    firstFit(partitions, partitionSize, processes, processSize);
+
+    // Best Fit
+    for (int i = 0; i < PARTITIONS; i++) partitionSize[i] = partitions[i];
+    for (int i = 0; i < PROCESSES; i++) processSize[i] = processes[i];
+    bestFit(partitions, partitionSize, processes, processSize);
+
+    // Worst Fit
+    for (int i = 0; i < PARTITIONS; i++) partitionSize[i] = partitions[i];
+    for (int i = 0; i < PROCESSES; i++) processSize[i] = processes[i];
+    worstFit(partitions, partitionSize, processes, processSize);
+
+    return 0;
+}
