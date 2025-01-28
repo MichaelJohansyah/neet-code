@@ -1,8 +1,6 @@
 '''
-    Warning : Masih ada solusi yang jauh lebih efisien
-
     Inti : 
-    Intinya itu s sama t disorting dulu, baru di bandingkan, kalau sama berarti return True,
+    s sama t disorting dulu, baru di bandingkan, kalau sama berarti return True,
     kalau tidak berarti return False.
     Supaya lebih efisien, kita bisa bandingkan dulu apakah s sama t punya banyak string yang sama.
 
